@@ -35,7 +35,7 @@ public class UnionFind2 implements UF {
     // find group / index of p.
     private int find(int p) {
        if ( p < 0 || p > parent.length)
-           throw new IllegalArgumentException("Index is invalid.");
+           throw new IllegalArgumentException("p is out of bound.");
        while (p != parent[p])
            p = parent[p];
        return p;

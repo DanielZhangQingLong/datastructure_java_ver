@@ -306,34 +306,4 @@ public class BST<E extends Comparable<E>> {
     }
     */
 
-    public static void main(String[] args) {
-        BST<Integer> bst = new BST<>();
-        //int[] nums = {5, 3, 6, 8, 4, 2};
-        //for (int num: nums) {
-        //    bst.add(num);
-        //}
-        //bst.preOrder();
-        //System.out.println();
-        //bst.inOrder();
-        //System.out.println();
-        //bst.postOrder();
-
-        //bst.levelOrder();
-
-        Random random = new Random();
-        int n = 10;
-        for (int i = 0; i < n; i ++)
-            bst.add(random.nextInt(10));
-        System.out.println(bst.size);
-
-        ArrayList<Integer> nums = new ArrayList<>();
-        while (!bst.isEmpty())
-            nums.add(bst.removeMin());
-
-        System.out.println(nums);
-
-
-
-
-    }
 }
