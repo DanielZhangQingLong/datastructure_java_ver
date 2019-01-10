@@ -33,12 +33,12 @@ public class BST<E extends Comparable<E>> {
      * @param e The element to insert into BST.
      */
     public void add(E e) {
-        add(root, e);
+        root = add(root, e);
     }
 
     /***
      *
-     * @param node  the root node of a certain BST.
+     * @param node a certain subtree of BST.
      * @param e the element to insert into BST.
      * @return the root node of a certain BST.
      */
