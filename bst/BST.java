@@ -1,5 +1,7 @@
 package com.daniel.datastructures.bst;
 
+import java.util.Stack;
+
 public class BST<E extends Comparable<E>> {
     private class Node{
         public E e;
@@ -54,6 +56,32 @@ public class BST<E extends Comparable<E>> {
         return node;
     }
 
+    /**
+     *
+     * @param e the element to search.
+     * @return
+     */
+    public boolean contains(E e) {
+        return contains(root, e);
+    }
+
+    /**
+     * Recursively called.
+     * @param node a certain subtree of BST.
+     * @param e the element to search.
+     * @return whether e is in the subtree.
+     */
+    private boolean contains(Node node, E e) {
+        if(node == null)
+            return false;
+        if (e.compareTo(node.e) == 0)
+            return true;
+        else if (e.compareTo(node.e) < 0)
+            return contains(node.left, e);
+        else
+            return contains(node.right, e);
+    }
+
     /*
         Old version.
     public void add(E e) {
@@ -83,4 +111,120 @@ public class BST<E extends Comparable<E>> {
 
     }
      */
+
+    public void preOrder() {
+        preOrder(root);
+    }
+
+    private void preOrder(Node node) {
+        if(node == null)
+            return;
+        System.out.println(node.e);
+        preOrder(node.left);
+        preOrder(node.right);
+    }
+
+    public void inOrder() {
+        inOrder(root);
+    }
+
+    private void inOrder(Node node){
+        if (node == null)
+            return;
+        inOrder(node.left);
+        System.out.println(node.e);
+        inOrder(node.right);
+    }
+
+    public void postOrder() {
+        postOrder(root);
+    }
+
+    private void postOrder(Node node) {
+        if (node == null)
+            return;
+        postOrder(node.left);
+        postOrder(node.right);
+        System.out.println(node.e);
+    }
+
+
+    // Non-Recursive Pre-order traverse
+    public void preOrderNR() {
+        Stack<Node> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            Node cur = stack.pop();
+            System.out.println(cur.e);
+            if(cur.right != null)
+                stack.push(cur.right);
+            if(cur.left != null)
+                stack.push(cur.left);
+        }
+    }
+
+    // Non-Recursive In-order traverse
+    public void inOrderNR() {
+        if (root == null)
+            return;
+        Node cur = root;
+        Stack<Node> stack = new Stack<>();
+        while (cur != null || !stack.isEmpty()){
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+
+            cur = stack.pop();
+            System.out.println(cur.e);
+            cur = cur.right;
+        }
+    }
+
+    // Non-Recursive Post-order traversal
+    public void postOrderNRTwoStacks() {
+        Stack<Node> stack1 = new Stack<>();
+        Stack<Node> stack2 = new Stack<>();
+        stack1.push(root);
+        while (!stack1.isEmpty()) {
+            root = stack1.pop();
+            if (root.left != null)
+                stack1.push(root.left);
+            if (root.right != null)
+                stack1.push(root.right);
+            stack2.push(root);
+        }
+        while (!stack2.isEmpty()) {
+            System.out.println(stack2.pop().e);
+        }
+
+    }
+
+    public void postOrderItrOneStack(){
+        
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder();
+        generateBSTString(root, 0, res);
+        return res.toString();
+    }
+
+    private void generateBSTString(Node node, int depth, StringBuilder res) {
+        if (node == null) {
+            res.append(generateDepthString(depth) + "null\n");
+            return;
+        }
+        res.append(generateDepthString(depth) + node.e + "\n");
+        generateBSTString(node.left, depth+1, res);
+        generateBSTString(node.right, depth+1, res);
+    }
+
+    private String generateDepthString(int depth) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < depth; i ++)
+            res.append("--");
+        return res.toString();
+    }
 }
