@@ -6,6 +6,7 @@ public class Main {
         int[] nums = {5, 3, 6, 8, 4, 2};
         for (int num: nums)
            bst.add(num);
+        /*
         System.out.println("Preorder");
         bst.preOrder();
         System.out.println("PreOrderNR");
@@ -20,6 +21,10 @@ public class Main {
 
         System.out.println("PostorderIterativelyWithTwoStacks");
         bst.postOrderNRTwoStacks();
+        */
+
+        System.out.println("LayerOrder");
+        bst.layerOrder();
 
 
     }
