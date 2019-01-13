@@ -21,10 +21,18 @@ public class Main {
 
         System.out.println("PostorderIterativelyWithTwoStacks");
         bst.postOrderNRTwoStacks();
-        */
-
-        System.out.println("LayerOrder");
+        ystem.out.println("LayerOrder");
         bst.layerOrder();
+
+        System.out.println("Minimum");
+        System.out.println(bst.minimum());
+        System.out.println("Minimum Iteratively");
+        System.out.println(bst.minimumNR());
+        System.out.println("Maximum");
+        System.out.println(bst.maximum());
+        */
+        System.out.println("Maximum Iteratively");
+        System.out.println(bst.maximumNR());
 
 
     }

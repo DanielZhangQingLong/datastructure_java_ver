@@ -219,6 +219,63 @@ public class BST<E extends Comparable<E>> {
         }
     }
 
+    public E minimum() {
+        if (size == 0)
+            throw new IllegalArgumentException("BST is Empty");
+        return minimum(root).e;
+    }
+
+    private Node minimum(Node node) {
+        Node cur = node.left;
+        if (cur == null)
+            return node;
+        else
+            return minimum(cur);
+    }
+
+    public E minimumNR() {
+        if (size == 0)
+            throw new IllegalArgumentException("BST is Empty");
+        Stack<Node> stack = new Stack<>();
+        Node cur = null;
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            cur = stack.pop();
+            if(cur.left != null)
+                stack.push(cur.left);
+        }
+        return root.e;
+    }
+
+    public E maximum() {
+        if (size == 0)
+            throw new IllegalArgumentException("BST is empty");
+        return maximum(root).e;
+    }
+
+    private Node maximum(Node node) {
+        Node cur =  node.right;
+        if (cur == null)
+            return node;
+        else
+            return maximum(cur);
+    }
+
+    public E maximumNR() {
+        if (size == 0)
+            throw new IllegalArgumentException("BST is empty");
+        Stack<Node> stack = new Stack<>();
+        Node cur = null;
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            cur = stack.pop();
+            if(cur.right != null)
+                stack.push(cur.right);
+        }
+        return cur.e;
+
+    }
+
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
