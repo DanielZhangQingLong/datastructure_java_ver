@@ -48,7 +48,6 @@ public class LinkedList<E> {
 //        head = node;
         // Gracefully
         add(0, e);
-        size ++;
     }
 
     // Add new node e, in given index
@@ -111,6 +110,28 @@ public class LinkedList<E> {
             cur = cur.next;
         }
         return false;
+    }
+
+    public E remove(int index) {
+        if (index < 0 || index >= size)
+            throw new IllegalArgumentException("Add failed. Illegal index");
+        Node prev = dummyHead;
+        for (int i = 0; i < index; i ++) {
+            prev = prev.next;
+        }
+        Node delNode = prev.next;
+        prev.next = delNode.next;
+        delNode.next = null;
+        size --;
+        return delNode.e;
+    }
+
+    public E removeFirst() {
+        return remove(0);
+    }
+
+    public E removeLast() {
+        return remove(size - 1);
     }
 
     @Override
