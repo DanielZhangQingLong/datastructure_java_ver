@@ -96,7 +96,7 @@ public class LinkedList<E> {
         cur.e = e;
     }
 
-    public boolean contain(E e) {
+    public boolean contains(E e) {
         Node cur = dummyHead.next;
 //        for (int i = 0; i < size; i ++) {
 //            if (cur.e.equals(e))
@@ -148,7 +148,7 @@ public class LinkedList<E> {
             delNode.next = null;
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
