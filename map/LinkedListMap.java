@@ -1,5 +1,11 @@
 package com.daniel.datastructures.map;
 
+import com.daniel.datastructures.set.LinkedListSet;
+import com.daniel.datastructures.utils.FileOperation;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
+import java.util.ArrayList;
+
 public class LinkedListMap<K, V> implements Map<K, V> {
 
     private class Node {
@@ -65,8 +71,11 @@ public class LinkedListMap<K, V> implements Map<K, V> {
     @Override
     public void add(K key, V value) {
         Node node = getNode(key);
-        if (node == null)
+        if (node == null) {
             dummyHead.next = new Node(key, value, dummyHead.next);
+            size ++;
+        }
+
         else
             node.value = value;
     }
@@ -95,5 +104,26 @@ public class LinkedListMap<K, V> implements Map<K, V> {
         }
 
         return null;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Pride and Prejudice");
+
+        ArrayList<String> words = new ArrayList<>();
+        if (FileOperation.readFile("/Users/daniel/Work/projects/datastructure/src/com/daniel/datastructures/utils/pride-and-prejudice.txt", words)) {
+            System.out.println("Total words: " + words.size());
+
+            LinkedListMap<String, Integer> map = new LinkedListMap<>();
+            for (String word: words) {
+                if (map.contains(word))
+                    map.set(word, map.get(word) + 1);
+                else
+                    map.add(word, 1);
+            }
+
+            System.out.println("Total different words: " + map.getSize());
+            System.out.println("Frequency of PRIDE: " + map.get("pride"));
+        }
+
     }
 }
