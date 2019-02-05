@@ -1,4 +1,4 @@
-package com.daniel.datastructures.avl_tree;
+    package com.daniel.datastructures.avl_tree;
 
 import com.daniel.datastructures.map.Map;
 import com.daniel.datastructures.utils.FileOperation;
@@ -40,6 +40,38 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
         return size == 0;
     }
 
+    public boolean isBST() {
+        ArrayList<K> keys = new ArrayList<>();
+        inOrder(root, keys);
+        for (int i = 1 ; i < keys.size(); i ++)
+            if (keys.get(i-1).compareTo(keys.get(i)) > 0)
+                return false;
+        return true;
+    }
+
+    private void inOrder(Node node, ArrayList<K> keys) {
+        if (node == null)
+            return;
+        inOrder(node.left, keys);
+        keys.add(node.key);
+        inOrder(node.right, keys);
+    }
+
+    public boolean isBalanced() {
+        return isBalanced(root);
+    }
+
+    private boolean isBalanced(Node node) {
+        if (node == null)
+            return true;
+        int balanceFactor = getBalanceFactor(node);
+        if (Math.abs(balanceFactor) > 1)
+            return false;
+        return isBalanced(node.left) && isBalanced(node.right);
+    }
+
+
+
     private int getHeight(Node node) {
         if (node == null)
             return 0;
@@ -52,6 +84,45 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
         return getHeight(node.left) - getHeight(node.right);
     }
 
+    //
+    //          y                               x
+    //         / \                            /   \
+    //        x  T4                          z     y
+    //       / \       ------------->       / \    / \
+    //      z   T3                         T1  T2 T3 T4
+    //     / \
+    //    T1 T2
+    //
+
+    private Node rightRotate(Node y) {
+        Node x = y.left;
+        Node T3 = x.right;
+        x.right = y;
+        y.left = T3;
+        y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
+        x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
+        return x;
+    }
+
+    //
+    //          y                               x
+    //         / \                            /   \
+    //        T1  x                          y     z
+    //           / \  ------------->        / \   / \
+    //          T2  z                      T1 T2 T3 T4
+    //             / \
+    //            T3 T4
+    //
+
+    private Node leftRotate(Node y) {
+        Node x = y.right;
+        Node T2 = x.left;
+        x.right = y;
+        y.right = T2;
+        y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
+        x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
+        return x;
+    }
     @Override
     public void add(K key, V value) {
         root = add(root, key, value);
@@ -71,6 +142,11 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
         int balanceFactor = getBalanceFactor(node);
         if (Math.abs(balanceFactor) > 1)
             System.out.println("unbalanced: " + balanceFactor);
+
+        if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0)
+            return rightRotate(node);
+        if (balanceFactor < -1 && getBalanceFactor(node.right) <= 0)
+            return leftRotate(node);
         return node;
     }
 
@@ -105,10 +181,6 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
         node.value = value;
     }
 
-//    @Override
-//    public V remove(K key) {
-//        return null;
-//    }
 
     public V remove(K key) {
         Node node = getNode(root, key);
@@ -188,6 +260,9 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
 
             System.out.println("Total different words: " + map.getSize());
             System.out.println("Frequency of PRIDE: " + map.get("pride"));
+
+            System.out.println("is BST : " + map.isBST());
+            System.out.println("is BST : " + map.isBalanced());
         }
 
     }
