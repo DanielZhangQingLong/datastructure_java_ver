@@ -117,7 +117,7 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
     private Node leftRotate(Node y) {
         Node x = y.right;
         Node T2 = x.left;
-        x.right = y;
+        x.left = y;
         y.right = T2;
         y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
         x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
@@ -129,38 +129,56 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
     }
 
     private Node add(Node node, K key, V value) {
-        if (node == null)
+        if (node == null){
+            size ++;
             return new Node(key, value);
+        }
         if (key.compareTo(node.key) < 0)
             node.left = add(node.left, key, value);
         else if (key.compareTo(node.key) > 0)
             node.right = add(node.right, key, value);
         else
             node.value = value;
-        node.height = 1 + Math.max(getHeight(node.left),
-                getHeight(node.right));
+        node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
         int balanceFactor = getBalanceFactor(node);
-        if (Math.abs(balanceFactor) > 1)
-            System.out.println("unbalanced: " + balanceFactor);
 
+//        if (Math.abs(balanceFactor) > 1)
+//            System.out.println("unbalanced: " + balanceFactor);
+
+        // Left-Left Case
         if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0)
             return rightRotate(node);
+
+        // Right-Right Case
         if (balanceFactor < -1 && getBalanceFactor(node.right) <= 0)
             return leftRotate(node);
+
+        // Left-Right Case
+        if (balanceFactor > 1 && getBalanceFactor(node.left) < 0) {
+            node.left = leftRotate(node.left);
+            return rightRotate(node);
+        }
+
+        // Right-Left Case
+        if (balanceFactor < -1 && getBalanceFactor(node.right) > 0 ) {
+            node.right = rightRotate(node.right);
+            return leftRotate(node);
+        }
         return node;
     }
 
-    // 返回以node为根节点的二分搜索树中, key所在的节点
     private Node getNode(Node node, K key) {
         if (node == null)
             return null;
-        if (key.compareTo(node.key) == 0)
+        if (key.equals(node.key)){
             return node;
+        }
         else if (key.compareTo(node.key) < 0)
             return getNode(node.left, key);
         else
             return getNode(node.right, key);
     }
+
 
     @Override
     public boolean contains(K key) {
@@ -262,7 +280,7 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
             System.out.println("Frequency of PRIDE: " + map.get("pride"));
 
             System.out.println("is BST : " + map.isBST());
-            System.out.println("is BST : " + map.isBalanced());
+            System.out.println("is Banlanced : " + map.isBalanced());
         }
 
     }
