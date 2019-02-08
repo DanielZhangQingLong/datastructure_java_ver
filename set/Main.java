@@ -19,7 +19,7 @@ public class Main {
     }
     public static void main(String[] args) {
 
-        String filename = "pride-and-prejudice.txt";
+        String filename = "/Users/daniel/Work/projects/datastructure/src/com/daniel/datastructures/utils/pride-and-prejudice.txt";
         BSTSet<String> bstSet = new BSTSet<>();
         double time1 = testSet(bstSet, filename);
 
@@ -29,6 +29,11 @@ public class Main {
         LinkedListSet<String> linkedListSet = new LinkedListSet<>();
         double time2 = testSet(linkedListSet, filename);
         System.out.println("Linked List Set: " + time2 + " s");
+
+        AVLSet<String> avlSet = new AVLSet<>();
+
+        double time3 = testSet(avlSet, filename);
+        System.out.println("AVL Set: " + time3 + " s");
 
     }
 }
