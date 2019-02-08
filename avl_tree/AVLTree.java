@@ -1,4 +1,4 @@
-    package com.daniel.datastructures.avl_tree;
+package com.daniel.datastructures.avl_tree;
 
 import com.daniel.datastructures.map.Map;
 import com.daniel.datastructures.utils.FileOperation;
@@ -139,11 +139,9 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
             node.right = add(node.right, key, value);
         else
             node.value = value;
+
         node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
         int balanceFactor = getBalanceFactor(node);
-
-//        if (Math.abs(balanceFactor) > 1)
-//            System.out.println("unbalanced: " + balanceFactor);
 
         // Left-Left Case
         if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0)
@@ -213,35 +211,64 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
     private Node remove(Node node, K key) {
         if (node == null)
             return null;
+        Node retNode;
         if (key.compareTo(node.key) < 0){
             node.left = remove(node.left, key);
-            return node;
+            retNode = node;
         }
         else if (key.compareTo(node.key) > 0) {
             node.right = remove(node.right, key);
-            return node;
+            retNode = node;
         }
         else { // e == node.e
             if (node.left == null) {
                 Node rightNode = node.right;
                 node.right = null;
                 size --;
-                return rightNode;
+                retNode = rightNode;
             }
             else if(node.right == null) {
                 Node leftNode = node.left;
                 node.left = null;
                 size --;
-                return leftNode;
+                retNode = leftNode;
             }
             else {
                 Node successor = minimum(node.right);
-                successor.right = removeMin(node.right);
+//                successor.right = removeMin(node.right);
+                successor.right = remove(node.right, successor.key);
                 successor.left = node.left;
                 node.left = node.right = null;
-                return successor;
+                retNode = successor;
             }
         }
+
+        if (retNode == null)
+            return null;
+
+        retNode.height = 1 + Math.max(getHeight(retNode.left), getHeight(retNode.right));
+        int balanceFactor = getBalanceFactor(retNode);
+
+        // Left-Left Case
+        if (balanceFactor > 1 && getBalanceFactor(retNode.left) >= 0)
+            return rightRotate(retNode);
+
+        // Right-Right Case
+        if (balanceFactor < -1 && getBalanceFactor(retNode.right) <= 0)
+            return leftRotate(retNode);
+
+        // Left-Right Case
+        if (balanceFactor > 1 && getBalanceFactor(retNode.left) < 0) {
+            retNode.left = leftRotate(retNode.left);
+            return rightRotate(retNode);
+        }
+
+        // Right-Left Case
+        if (balanceFactor < -1 && getBalanceFactor(retNode.right) > 0 ) {
+            retNode.right = rightRotate(retNode.right);
+            return leftRotate(retNode);
+        }
+        return retNode;
     }
 
     private Node minimum(Node node) {
@@ -281,6 +308,12 @@ public class AVLTree<K extends Comparable<K>, V> implements Map<K, V> {
 
             System.out.println("is BST : " + map.isBST());
             System.out.println("is Banlanced : " + map.isBalanced());
+
+            for (String word : words) {
+                map.remove(word);
+                if (!map.isBalanced() || !map.isBST())
+                    throw new RuntimeException("Error");
+            }
         }
 
     }
